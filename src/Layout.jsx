@@ -42,9 +42,14 @@ const Layout = () => {
           //   icon: <DashboardIcon sx={{ color: "primary.main" }} />,
           // },
           {
+            name: "Users",
+            route: "/users",
+            icon: <GroupOutlinedIcon sx={{ color:pathname.includes("/users")?"white" :"primary.main" }} />,
+          },
+          {
             name: "Participants",
             route: "/participants",
-            icon: <GroupOutlinedIcon sx={{ color: "primary.main" }} />,
+            icon: <GroupOutlinedIcon sx={{ color:pathname.includes("/participants")?"white" :"primary.main" }} />,
           },
           // {
           //   name: "Prizes",
@@ -73,7 +78,7 @@ const Layout = () => {
           {
             name: "Change Password",
             route: "/change-password",
-            icon: <KeyIcon sx={{ color: "primary.main" }} />,
+            icon: <KeyIcon sx={{ color:pathname.includes("/change-password")?"white" :"primary.main" }} />,
           },
         ]
       : [
@@ -82,6 +87,11 @@ const Layout = () => {
           //   route: "/dashboard",
           //   icon: <DashboardIcon sx={{ color: "primary.main" }} />,
           // },
+          {
+            name: "Users",
+            route: "/users",
+            icon: <GroupOutlinedIcon sx={{ color: "primary.main" }} />,
+          },
           {
             name: "Participants",
             route: "/participants",
@@ -119,7 +129,7 @@ const Layout = () => {
   return (
     <Box
       sx={{
-        background: "linear-gradient(to top, #00F6ED 50%, #0D519D 50%)",
+        background: "linear-gradient(to top, #59BCA7 50%, #0D519D 50%)",
         height: "100vh",
         position: "relative",
         zIndex: 0,
@@ -171,7 +181,7 @@ const Layout = () => {
                     px: "10px",
                     py: "10px",
                     mb: "1rem",
-                    bgcolor: pathname.includes(nav.route) && "#EC008C",
+                    bgcolor: pathname.includes(nav.route) && "#11B5E4",
                   }}
                 >
                   <Box
@@ -186,7 +196,7 @@ const Layout = () => {
                       sx={{
                         color: pathname.includes(nav.route)
                           ? "#fff"
-                          : "secondary.main",
+                          : "primary.main",
                         fontWeight: pathname.includes(nav.route)
                           ? "bold"
                           : null,
@@ -225,7 +235,7 @@ const Layout = () => {
                 <ExitToAppIcon sx={{ color: "primary.main" }} />
                 <Typography
                   sx={{
-                    color: "secondary.main",
+                    color: "primary.main",
                     textTransform: "none",
                     display: { xs: "none", md: "block" },
                   }}
@@ -268,7 +278,7 @@ const Layout = () => {
                 px: "10px",
                 py: "10px",
                 mb: "1rem",
-                bgcolor: pathname.includes(nav.route) && "#EC008C",
+                bgcolor: pathname.includes(nav.route) && "#11B5E4",
               }}
             >
               <Box
@@ -283,7 +293,7 @@ const Layout = () => {
                   sx={{
                     color: pathname.includes(nav.route)
                       ? "#fff"
-                      : "secondary.main",
+                      : "primary.main",
                     fontWeight: pathname.includes(nav.route) ? "bold" : null,
                     userSelect: "none",
                     display: { xs: "none", md: "block" },
@@ -320,7 +330,7 @@ const Layout = () => {
             <ExitToAppIcon sx={{ color: "primary.main" }} />
             <Typography
               sx={{
-                color: "secondary.main",
+                color: "primary.main",
                 textTransform: "none",
                 display: { xs: "none", md: "block" },
               }}

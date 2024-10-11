@@ -5,12 +5,12 @@ export const theme = createTheme({
     // use for typo color and line
     primary: {
       main: "#11B5E4",
-      hover: "#03045e",
+      hover: "#11B5E4",
       light: "#eee",
     },
     // use for mui components like Button and input
     secondary: {
-      main: "#00F6ED",
+      main: "#59BCA7",
       light: "#CAD8DE"
       // light: "#A7A7A7",
       // dark: "#5C5C5C",

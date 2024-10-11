@@ -1,8 +1,7 @@
 import { LoadingButton } from "@mui/lab";
-import {  Box, Container, TextField, Typography } from "@mui/material";
-import  { useEffect, useState } from "react";
+import { Box, Container, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
 import { useMutation } from "react-query";
 import axios from "axios";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -18,9 +17,11 @@ const Login = () => {
     email: "",
     password: "",
   });
+
   const handleOnChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
+
   const { isLoading, mutate } = useMutation(
     (data) => {
       return axios.post(
@@ -95,23 +96,9 @@ const Login = () => {
           p: 4,
         }}
       >
-        {/* <Avatar
-          sx={{ m: 1, bgcolor: "primary.main", width: "60px", height: "60px" }}
-        >
-          <LockOutlinedIcon sx={{ width: "40px", height: "40px" }} />
-        </Avatar> */}
-        <Box component="img" sx={{width:"40%"}}  src="/logo.png" alt="logo" />
-        <Box
-          component="form"
-          noValidate
-          onSubmit={handleSubmit}
-          sx={{ width: "100%" }}
-        >
-          <Typography
-            variant="subtitle2"
-            fontWeight="bold"
-            sx={{ marginTop: "20px", color: "white" }}
-          >
+        <Box component="img" sx={{ width: "40%" }} src="/logo.png" alt="logo" />
+        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ width: "100%" }}>
+          <Typography variant="subtitle2" fontWeight="bold" sx={{ marginTop: "20px", color: "white" }}>
             Email
           </Typography>
           <TextField
@@ -151,11 +138,7 @@ const Login = () => {
             }}
           />
 
-          <Typography
-            variant="subtitle2"
-            fontWeight="bold"
-            sx={{ marginTop: "10px", color: "white" }}
-          >
+          <Typography variant="subtitle2" fontWeight="bold" sx={{ marginTop: "10px", color: "white" }}>
             Password
           </Typography>
           <TextField
@@ -167,8 +150,7 @@ const Login = () => {
             fullWidth
             name="password"
             type="password"
-            autoComplete="password"
-            autoFocus
+            autoComplete="current-password"
             sx={{
               backgroundColor: "white",
               borderRadius: "4px",
@@ -221,17 +203,14 @@ const Login = () => {
             Sign In
           </LoadingButton>
 
-          <Link
-            // sx={{
-            //   float: "right",
-            //   cursor: "pointer",
-            //   color: "primary.main",
-            //   textDecoration: "none",
-            // }}
-            style={{ color: "white" }}
-          >
-            Forget Password?
-          </Link>
+          <Box sx={{ display: "flex", justifyContent: "space-between", color: "white", marginTop: "10px" }}>
+            <Link to="/forgot-password" style={{ color: "white", textDecoration: "none" }}>
+              Forget Password?
+            </Link>
+            <Link to="/signup" style={{ color: "white", textDecoration: "none" }}>
+              No account? Sign Up
+            </Link>
+          </Box>
         </Box>
       </Container>
       <Box
@@ -248,3 +227,4 @@ const Login = () => {
 };
 
 export default Login;
+ 

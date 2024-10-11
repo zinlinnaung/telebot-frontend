@@ -26,6 +26,8 @@ import RevoteLayout from "../pages/Lists/RevoteLayout";
 import RevoteList from "../pages/Lists/RevoteList";
 import ChangePassword from "../pages/ChangePassword";
 import TopupLog from "../pages/TopupLog";
+import Users from "../pages/Users";
+import SignUp from "../pages/SignUp";
 
 // const Dashboard = lazy(() => import("../pages/Dashboard"));
 
@@ -33,6 +35,7 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="login" element={<Login />} />
+      <Route path="signup" element={<SignUp />} />
       
       <Route element={<PrivateRoute component={Layout} />}>
         {/* <Route path="dashboard" element={<Dashboard />} /> */}
@@ -61,6 +64,8 @@ const router = createBrowserRouter(
         </Route>
 
         <Route path="change-password" element={<ChangePassword />} />
+        <Route path="users" element={<Users />} />
+        
 
         <Route path="*" element={<Navigate to="participants" replace />} />
       </Route>
