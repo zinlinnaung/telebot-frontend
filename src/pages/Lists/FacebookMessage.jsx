@@ -31,7 +31,7 @@ import TextMessage from "../../components/message/TextMessage";
 import ButtonComponent from "../../components/message/Button";
 import AnimatedNumber from "../../components/message/AnimatedNumber";
 
-const ViberMessage = () => {
+const FacebookMessage = () => {
   const api = useAxios();
 
   const { data } = useQuery("winners", async () => {
@@ -468,4 +468,4 @@ const ViberMessage = () => {
   );
 };
 
-export default ViberMessage;
+export default FacebookMessage;

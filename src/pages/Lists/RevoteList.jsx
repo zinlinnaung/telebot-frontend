@@ -45,7 +45,7 @@ const RevoteList = () => {
 
   return (
     <Box sx={{ width: "100%", height: 350, flex: 1 }}>
-      <DataGrid
+      {/* <DataGrid
         rows={data ?? []}
         columns={columns}
         disableRowSelectionOnClick
@@ -54,7 +54,7 @@ const RevoteList = () => {
           noRowsOverlay: NoRowOverlay,
         }}
         sx={{ "--DataGrid-overlayHeight": "300px" }}
-      />
+      /> */}
     </Box>
   );
 };

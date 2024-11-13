@@ -1,4 +1,4 @@
-import  { useState } from "react";
+import { useState } from "react";
 import {
   Box,
   Breadcrumbs,
@@ -9,7 +9,9 @@ import {
   Typography,
 } from "@mui/material";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import SendIcon from "@mui/icons-material/Send";
 import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import StorefrontIcon from "@mui/icons-material/Storefront";
 import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -17,12 +19,12 @@ import HomeIcon from "@mui/icons-material/Home";
 // import useAxios from "./hooks/useAxios";
 import PercentIcon from "@mui/icons-material/Percent";
 import MenuIcon from "@mui/icons-material/Menu";
-import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
+import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import authAtom from "./recoil/auth/atom";
 import { jwtDecode } from "jwt-decode";
 import KeyIcon from "@mui/icons-material/Key";
-import Logo from './assets/logo.png'
+import Logo from "./assets/logo.png";
 
 const Layout = () => {
   // const api = useAxios();
@@ -36,20 +38,42 @@ const Layout = () => {
   const navs =
     role === "Admin"
       ? [
-          // {
-          //   name: "Dashboard",
-          //   route: "/dashboard",
-          //   icon: <DashboardIcon sx={{ color: "primary.main" }} />,
-          // },
+          {
+            name: "Dashboard",
+            route: "/message",
+            icon: (
+              <DashboardIcon
+                sx={{
+                  color: pathname.includes("/message")
+                    ? "white"
+                    : "primary.main",
+                }}
+              />
+            ),
+          },
           {
             name: "Users",
             route: "/users",
-            icon: <GroupOutlinedIcon sx={{ color:pathname.includes("/users")?"white" :"primary.main" }} />,
+            icon: (
+              <GroupOutlinedIcon
+                sx={{
+                  color: pathname.includes("/users") ? "white" : "primary.main",
+                }}
+              />
+            ),
           },
           {
             name: "Participants",
             route: "/participants",
-            icon: <GroupOutlinedIcon sx={{ color:pathname.includes("/participants")?"white" :"primary.main" }} />,
+            icon: (
+              <GroupOutlinedIcon
+                sx={{
+                  color: pathname.includes("/participants")
+                    ? "white"
+                    : "primary.main",
+                }}
+              />
+            ),
           },
           // {
           //   name: "Prizes",
@@ -61,13 +85,19 @@ const Layout = () => {
           //   route: "/winning-ratio",
           //   icon: <PercentIcon sx={{ color: "primary.main" }} />,
           // },
-          // {
-          //   name: "Spin Result",
-          //   route: "/spin-result",
-          //   icon: (
-          //     <FormatListBulletedOutlinedIcon sx={{ color: "primary.main" }} />
-          //   ),
-          // },
+          {
+            name: "Sent Message",
+            route: "/sent-message",
+            icon: (
+              <SendIcon
+                sx={{
+                  color: pathname.includes("/sent-message")
+                    ? "white"
+                    : "primary.main",
+                }}
+              />
+            ),
+          },
           // {
           //   name: "Topup Logs",
           //   route: "/topup-logs",
@@ -78,7 +108,15 @@ const Layout = () => {
           {
             name: "Change Password",
             route: "/change-password",
-            icon: <KeyIcon sx={{ color:pathname.includes("/change-password")?"white" :"primary.main" }} />,
+            icon: (
+              <KeyIcon
+                sx={{
+                  color: pathname.includes("/change-password")
+                    ? "white"
+                    : "primary.main",
+                }}
+              />
+            ),
           },
         ]
       : [
