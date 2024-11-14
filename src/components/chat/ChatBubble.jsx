@@ -2,7 +2,14 @@ import React from "react";
 import { Box, Button, TextareaAutosize, Typography } from "@mui/material";
 
 // ChatBubble Component
-const ChatBubble = ({ message, isUser, handleInputChange, type, action }) => {
+const ChatBubble = ({
+  message,
+  isUser,
+  handleInputChange,
+  type,
+  action,
+  subject,
+}) => {
   const renderMessage = () => {
     switch (type) {
       case "text":
@@ -11,7 +18,7 @@ const ChatBubble = ({ message, isUser, handleInputChange, type, action }) => {
             minRows={1}
             maxRows={100}
             value={message}
-            onChange={handleInputChange} // Update the parent’s state
+            onChange={handleInputChange}
             style={{
               width: "100%",
               border: "none",
@@ -23,6 +30,28 @@ const ChatBubble = ({ message, isUser, handleInputChange, type, action }) => {
         );
       case "image":
         return <img src={message} alt="chatbot" style={{ maxWidth: "100%" }} />;
+
+      case "email":
+        return (
+          <Box sx={{ padding: 1 }}>
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: "bold", marginBottom: 1 }}
+            >
+              {subject ? subject : "This is subject"}
+            </Typography>
+            <Box
+              sx={{
+                fontSize: "0.9rem",
+                whiteSpace: "pre-wrap",
+                wordWrap: "break-word",
+                "& p": { marginLeft: 1 },
+              }}
+              dangerouslySetInnerHTML={{ __html: message }}
+            />
+          </Box>
+        );
+
       case "button":
         {
           console.log(message);

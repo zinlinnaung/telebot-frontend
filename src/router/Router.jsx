@@ -29,6 +29,10 @@ import SignUp from "../pages/SignUp";
 import Message from "../pages/Message";
 import FacebookMessage from "../pages/Lists/FacebookMessage";
 import ViberMessage from "../pages/Lists/PrizesList";
+import SmsLayout from "../pages/Lists/SmsLayout";
+import SmsList from "../pages/Lists/SmsList";
+import EmailLayout from "../pages/Lists/EmailLayout";
+import EmailList from "../pages/Lists/EmailList";
 
 // const Dashboard = lazy(() => import("../pages/Dashboard"));
 
@@ -55,8 +59,11 @@ const router = createBrowserRouter(
             <Route index element={<RevoteList />} />
           </Route>
 
-          <Route path="sms-message" element={<RevoteLayout />}>
-            <Route index element={<RevoteList />} />
+          <Route path="sms-message" element={<SmsLayout />}>
+            <Route index element={<SmsList />} />
+          </Route>
+          <Route path="email-message" element={<EmailLayout />}>
+            <Route index element={<EmailList />} />
           </Route>
         </Route>
 

@@ -106,7 +106,7 @@ const ListLayout = () => {
         </Box>
         <Box
           sx={{
-            borderBottom: activePath.includes("/sent-message/revote-list")
+            borderBottom: activePath.includes("/sent-message/sms-message")
               ? `3px solid ${theme.palette.primary.main}`
               : "none",
           }}
@@ -120,12 +120,12 @@ const ListLayout = () => {
 
         <Box
           sx={{
-            borderBottom: activePath.includes("/sent-message/revote-list")
+            borderBottom: activePath.includes("/sent-message/email-message")
               ? `3px solid ${theme.palette.primary.main}`
               : "none",
           }}
         >
-          <Link to="sms-message">
+          <Link to="email-message">
             <Button variant="text" color="primary">
               Email
             </Button>

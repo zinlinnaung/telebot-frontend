@@ -31,7 +31,7 @@ import TextMessage from "../../components/message/TextMessage";
 import ButtonComponent from "../../components/message/Button";
 import AnimatedNumber from "../../components/message/AnimatedNumber";
 
-const RevoteList = () => {
+const SmsList = () => {
   const api = useAxios();
 
   const { data } = useQuery("winners", async () => {
@@ -306,7 +306,7 @@ const RevoteList = () => {
           >
             Add Text
           </Button>
-          <Button
+          {/* <Button
             variant="contained"
             sx={{ mt: 2 }}
             onClick={handleAddImage} // Add image component
@@ -319,7 +319,7 @@ const RevoteList = () => {
             onClick={handleAddButton} // Add image component
           >
             Add Button
-          </Button>
+          </Button> */}
 
           {/* <Button
             variant="contained"
@@ -468,4 +468,4 @@ const RevoteList = () => {
   );
 };
 
-export default RevoteList;
+export default SmsList;
