@@ -1,6 +1,6 @@
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import NoRowOverlay from "../../components/common/NoRowOverlay";
 import ViewDetailButton from "../../components/common/ViewDetailButton";
 import useAxios from "../../hooks/useAxios";
@@ -33,6 +33,7 @@ import AnimatedNumber from "../../components/message/AnimatedNumber";
 
 const SmsList = () => {
   const api = useAxios();
+  const { id } = useParams();
 
   const { data } = useQuery("winners", async () => {
     const response = await api.get("/api/participant");
@@ -172,7 +173,7 @@ const SmsList = () => {
     <Box
       sx={{
         width: "100%",
-        height: 300,
+        // height: 10,
         display: "flex",
         flex: 1,
         justifyContent: "flex-end",
@@ -185,23 +186,56 @@ const SmsList = () => {
           flexDirection: "column",
         }}
       >
-        <Card
+        <Box
           sx={{
-            mb: 3,
             width: "100%",
-            height: "20%",
-            minHeight: 100,
-            maxHeight: 100,
+            // height: "20%",
+            display: "flex",
+            flexDirection: "row",
+            gap: 2,
           }}
         >
-          <CardContent>
-            <Typography variant="h6" textAlign="center">
-              User Count
-            </Typography>
-            {/* Use the AnimatedNumber component to animate the user count */}
-            <AnimatedNumber targetNumber={1000} duration={3} />
-          </CardContent>
-        </Card>
+          <Card
+            sx={{
+              mb: 2,
+              padding: 0,
+              width: "100%",
+              // height: "20%",
+              minHeight: 50,
+              maxHeight: 90,
+            }}
+          >
+            <CardContent>
+              <Typography variant="h6" textAlign="center">
+                Campaign Name
+              </Typography>
+              <Typography variant="h5" textAlign="center" color={"primary"}>
+                {`Campaign ${id}`}
+              </Typography>
+
+              {/* Use the AnimatedNumber component to animate the user count */}
+              {/* <AnimatedNumber targetNumber={1000} duration={3} /> */}
+            </CardContent>
+          </Card>
+          <Card
+            sx={{
+              mb: 2,
+              padding: 0,
+              width: "100%",
+              // height: "20%",
+              minHeight: 50,
+              maxHeight: 90,
+            }}
+          >
+            <CardContent>
+              <Typography variant="h6" textAlign="center">
+                User Count
+              </Typography>
+              {/* Use the AnimatedNumber component to animate the user count */}
+              <AnimatedNumber targetNumber={1000} duration={3} />
+            </CardContent>
+          </Card>
+        </Box>
 
         <Box
           sx={{
@@ -214,8 +248,8 @@ const SmsList = () => {
             boxShadow: 3,
             borderRadius: 2,
             backgroundColor: "#fff",
-            minHeight: "55vh",
-            maxHeight: "80vh", // Limit the height of the whole box
+            minHeight: "50vh",
+            maxHeight: "50vh", // Limit the height of the whole box
             overflowY: "auto", // Enable vertical scrolling
 
             "&::-webkit-scrollbar": {
@@ -306,20 +340,6 @@ const SmsList = () => {
           >
             Add Text
           </Button>
-          {/* <Button
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={handleAddImage} // Add image component
-          >
-            Add Image
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={handleAddButton} // Add image component
-          >
-            Add Button
-          </Button> */}
 
           {/* <Button
             variant="contained"
@@ -355,14 +375,14 @@ const SmsList = () => {
         <DeviceFrameset
           device="Galaxy Note 8"
           color="gold"
-          zoom={0.8}
-          width={"70%"}
-          height={"70vh"}
+          zoom={0.9}
+          width={"60%"}
+          height={"61vh"}
         >
           <Box
             mt={2}
             sx={{
-              height: "60vh",
+              height: "55vh",
               margin: 2,
               overflowY: "auto",
               border: "1px solid #ccc",
@@ -442,7 +462,7 @@ const SmsList = () => {
             </Stack>
           </Box>
 
-          <Box mt={2} display="flex" gap={1} sx={{ margin: 2 }}>
+          {/* <Box mt={2} display="flex" gap={1} sx={{ margin: 2 }}>
             <TextareaAutosize
               minRows={5}
               maxRows={10}
@@ -461,7 +481,7 @@ const SmsList = () => {
             <Button variant="contained" onClick={handleSendMessage}>
               Send
             </Button>
-          </Box>
+          </Box> */}
         </DeviceFrameset>
       </Container>
     </Box>

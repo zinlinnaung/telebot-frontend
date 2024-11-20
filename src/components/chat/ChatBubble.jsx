@@ -79,7 +79,7 @@ const ChatBubble = ({
         margin: "5px 0",
       }}
     >
-      {!isUser && (
+      {!isUser && type != "email" && (
         <Box
           sx={{
             // marginTop: 2,

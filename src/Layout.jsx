@@ -24,6 +24,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import authAtom from "./recoil/auth/atom";
 import { jwtDecode } from "jwt-decode";
 import KeyIcon from "@mui/icons-material/Key";
+import CampaignIcon from "@mui/icons-material/Campaign";
 import Logo from "./assets/logo.png";
 
 const Layout = () => {
@@ -38,53 +39,34 @@ const Layout = () => {
   const navs =
     role === "Admin"
       ? [
+          // {
+          //   name: "Dashboard",
+          //   route: "/message",
+          //   icon: (
+          //     <DashboardIcon
+          //       sx={{
+          //         color: pathname.includes("/message")
+          //           ? "white"
+          //           : "primary.main",
+          //       }}
+          //     />
+          //   ),
+          // },
+
           {
-            name: "Dashboard",
-            route: "/message",
+            name: "Campaigns",
+            route: "/campaign",
             icon: (
-              <DashboardIcon
+              <CampaignIcon
                 sx={{
-                  color: pathname.includes("/message")
+                  color: pathname.includes("/campaign")
                     ? "white"
                     : "primary.main",
                 }}
               />
             ),
           },
-          {
-            name: "Users",
-            route: "/users",
-            icon: (
-              <GroupOutlinedIcon
-                sx={{
-                  color: pathname.includes("/users") ? "white" : "primary.main",
-                }}
-              />
-            ),
-          },
-          {
-            name: "Participants",
-            route: "/participants",
-            icon: (
-              <GroupOutlinedIcon
-                sx={{
-                  color: pathname.includes("/participants")
-                    ? "white"
-                    : "primary.main",
-                }}
-              />
-            ),
-          },
-          // {
-          //   name: "Prizes",
-          //   route: "/prizes",
-          //   icon: <StorefrontIcon sx={{ color: "primary.main" }} />,
-          // },
-          // {
-          //   name: "Winning Ratio",
-          //   route: "/winning-ratio",
-          //   icon: <PercentIcon sx={{ color: "primary.main" }} />,
-          // },
+
           {
             name: "Sent Message",
             route: "/sent-message",
@@ -98,33 +80,22 @@ const Layout = () => {
               />
             ),
           },
+
           // {
-          //   name: "Topup Logs",
-          //   route: "/topup-logs",
+          //   name: "Change Password",
+          //   route: "/change-password",
           //   icon: (
-          //     <PhoneIphoneIcon sx={{ color: "primary.main" }} />
+          //     <KeyIcon
+          //       sx={{
+          //         color: pathname.includes("/change-password")
+          //           ? "white"
+          //           : "primary.main",
+          //       }}
+          //     />
           //   ),
           // },
-          {
-            name: "Change Password",
-            route: "/change-password",
-            icon: (
-              <KeyIcon
-                sx={{
-                  color: pathname.includes("/change-password")
-                    ? "white"
-                    : "primary.main",
-                }}
-              />
-            ),
-          },
         ]
       : [
-          // {
-          //   name: "Dashboard",
-          //   route: "/dashboard",
-          //   icon: <DashboardIcon sx={{ color: "primary.main" }} />,
-          // },
           {
             name: "Users",
             route: "/users",

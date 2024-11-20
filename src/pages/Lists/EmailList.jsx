@@ -1,6 +1,6 @@
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import NoRowOverlay from "../../components/common/NoRowOverlay";
 import ViewDetailButton from "../../components/common/ViewDetailButton";
 import useAxios from "../../hooks/useAxios";
@@ -34,6 +34,7 @@ import EmailEditor from "../../components/message/EmailEditor";
 
 const EmailList = () => {
   const api = useAxios();
+  const { id } = useParams();
 
   const { data } = useQuery("winners", async () => {
     const response = await api.get("/api/participant");
@@ -64,23 +65,56 @@ const EmailList = () => {
           flexDirection: "column",
         }}
       >
-        <Card
+        <Box
           sx={{
-            mb: 3,
             width: "100%",
-            height: "20%",
-            minHeight: 100,
-            maxHeight: 100,
+            // height: "20%",
+            display: "flex",
+            flexDirection: "row",
+            gap: 2,
           }}
         >
-          <CardContent>
-            <Typography variant="h6" textAlign="center">
-              User Count
-            </Typography>
-            {/* Use the AnimatedNumber component to animate the user count */}
-            <AnimatedNumber targetNumber={1000} duration={3} />
-          </CardContent>
-        </Card>
+          <Card
+            sx={{
+              mb: 2,
+              padding: 0,
+              width: "100%",
+              // height: "20%",
+              minHeight: 50,
+              maxHeight: 90,
+            }}
+          >
+            <CardContent>
+              <Typography variant="h6" textAlign="center">
+                Campaign Name
+              </Typography>
+              <Typography variant="h5" textAlign="center" color={"primary"}>
+                {`Campaign ${id}`}
+              </Typography>
+
+              {/* Use the AnimatedNumber component to animate the user count */}
+              {/* <AnimatedNumber targetNumber={1000} duration={3} /> */}
+            </CardContent>
+          </Card>
+          <Card
+            sx={{
+              mb: 2,
+              padding: 0,
+              width: "100%",
+              // height: "20%",
+              minHeight: 50,
+              maxHeight: 90,
+            }}
+          >
+            <CardContent>
+              <Typography variant="h6" textAlign="center">
+                User Count
+              </Typography>
+              {/* Use the AnimatedNumber component to animate the user count */}
+              <AnimatedNumber targetNumber={1000} duration={3} />
+            </CardContent>
+          </Card>
+        </Box>
 
         <Box
           sx={{
@@ -181,9 +215,9 @@ const EmailList = () => {
         <DeviceFrameset
           device="Galaxy Note 8"
           color="gold"
-          zoom={0.8}
-          width={"70%"}
-          height={"70vh"}
+          zoom={0.9}
+          width={"60%"}
+          height={"61vh"}
         >
           <Box
             mt={2}

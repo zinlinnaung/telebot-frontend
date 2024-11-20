@@ -37,8 +37,8 @@ const ImageUpload = ({
       <Box
         sx={{
           width: "100%",
-          height: "50%",
-          minHeight: 200, // Fixed height for image box
+          height: "40%",
+          minHeight: 150, // Fixed height for image box
           border: "2px dashed #ccc",
           display: "flex",
           justifyContent: "center",

@@ -14,7 +14,6 @@ import React, { useState } from "react";
 import ItemCard from "../../components/winningRatio/ItemCard";
 import useAxios from "../../hooks/useAxios";
 import { useQuery } from "react-query";
-import { da } from "date-fns/locale";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -39,24 +38,6 @@ const WinningRatio = () => {
 
   return (
     <Box>
-      {/* <Button
-        sx={{
-          display: "block",
-          bgcolor: "primary.main",
-          color: "primary.light",
-          width: "8rem",
-          ml: "auto",
-          my: "1rem",
-          ":hover": {
-            bgcolor: "primary.hover",
-          },
-        }}
-        onClick={() => setOpen(true)}
-      >
-        Create
-      </Button> */}
-      {/* <CreateWinningRatioModal open={open} setOpen={setOpen} /> */}
-      {/* <WinningRatioModal open={open} setOpen={setOpen} /> */}
       <TableContainer component={Paper}>
         <Table size="small" stickyHeader>
           <TableHead>
