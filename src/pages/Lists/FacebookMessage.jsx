@@ -1,206 +1,157 @@
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { useQuery } from "react-query";
-import { Link, useParams } from "react-router-dom";
-import NoRowOverlay from "../../components/common/NoRowOverlay";
-import ViewDetailButton from "../../components/common/ViewDetailButton";
-import useAxios from "../../hooks/useAxios";
-import "react-device-frameset/styles/marvel-devices.min.css";
 import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import {
-  Container,
   Box,
-  TextField,
   Button,
   Typography,
-  Stack,
-  TextareaAutosize,
   Card,
   CardContent,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+  Container,
+  Stack,
 } from "@mui/material";
-import ChatBubble from "../../components/chat/ChatBubble";
+import { useParams } from "react-router-dom";
 import { DeviceFrameset } from "react-device-frameset";
-import { useSpring, animated } from "@react-spring/web";
-
-import ImageUpload from "../../components/message/ImageUpload";
 import TextMessage from "../../components/message/TextMessage";
+import ImageUpload from "../../components/message/ImageUpload";
 import ButtonComponent from "../../components/message/Button";
+import ChatBubble from "../../components/chat/ChatBubble";
 import AnimatedNumber from "../../components/message/AnimatedNumber";
+import axios from "axios";
 
 const FacebookMessage = () => {
-  const api = useAxios();
   const { id } = useParams();
-
-  const { data } = useQuery("winners", async () => {
-    const response = await api.get("/api/participant");
-    return response.data?.filter((item) => item.winner === true);
-  });
-
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-
-  const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
 
-  const [selectedImage, setSelectedImage] = useState(null);
-  const fileInputRef = useRef(null);
+  // Unified state for all components
+  const [components, setComponents] = useState([]);
+  const [campaignData, setCampaignData] = useState(null);
 
-  // State to track the order of added components (Text or Image)
-  const [componentOrder, setComponentOrder] = useState([]);
-
-  const [textComponents, setTextComponents] = useState([]);
-
-  // Track the image for each image component
-  const [imageComponents, setImageComponents] = useState([]);
-
-  const [buttonComponents, setButtonComponents] = useState([]);
-
-  // Editor State for Button (Name, Action, and Form Visibility)
-  const [botmessage, setBotMessage] = useState("");
-  const [buttonName, setButtonName] = useState("");
-  const [buttonAction, setButtonAction] = useState("");
-  const [showButtonForm, setShowButtonForm] = useState(false);
-
-  // State to track the components themselves
-  const [addedTextComponents, setAddedTextComponents] = useState([]);
-  const [addedImageComponents, setAddedImageComponents] = useState([]);
-
-  // Handle image change
-  const handleImageChange = (event, index) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-
-      // Update the specific image component
-      const updatedImageComponents = [...imageComponents];
-      updatedImageComponents[index] = { content: imageUrl };
-      setImageComponents(updatedImageComponents);
-
-      // Simulate chatbot response with the image
-      simulateChatbotResponse(imageUrl, false, index);
-    }
-  };
-
-  // Handle sending the user's message
-  const handleSendMessage = () => {
-    if (!input.trim()) return;
-
-    // Add the user's message to the chat
-    const newMessage = { type: "text", content: input, sender: "user" };
-    setMessages([...messages, newMessage]);
-
-    // Add the message to the specific text component
-    setTextComponents((prev) => [...prev, { content: input }]);
-
-    setInput("");
-    simulateChatbotResponse();
-  };
-
-  // Simulate Chatbot Response
-  const simulateChatbotResponse = (imageUrl, is_replace) => {
-    setIsTyping(true);
-    setTimeout(() => {
-      const randomResponse = {
-        type: "image",
-        content: imageUrl ? imageUrl : "https://via.placeholder.com/150",
-        sender: "bot",
-      };
-
-      if (!is_replace) {
-        setMessages((prevMessages) => [...prevMessages, randomResponse]);
-      } else {
-        setMessages((prevMessages) => [randomResponse]);
+  // Fetch existing campaign details
+  useEffect(() => {
+    const fetchCampaignDetails = async () => {
+      try {
+        const response = await axios.get(
+          import.meta.env.VITE_SERVICE_BASE_URL + `/campaigns/${id}`
+        );
+        setCampaignData(response.data);
+        setComponents(JSON.parse(response.data.CampainDetail.facebook));
+      } catch (error) {
+        console.error("Error fetching campaign details:", error);
       }
-      setIsTyping(false);
-    }, 1500);
-  };
+    };
+    fetchCampaignDetails();
+  }, [id]);
 
   // Scroll to the latest message
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [components]);
 
-  const handleAddButton = () => {
-    setShowButtonForm(true); // Show the form to enter button name and function
-    setComponentOrder((prev) => [...prev, "button"]);
-    setButtonComponents((prev) => [
+  // Add a new text component
+  const handleAddText = () => {
+    setComponents((prev) => [
       ...prev,
-      { label: buttonName, action: buttonAction },
+      { type: "text", content: "" }, // Default content can be empty
     ]);
   };
 
-  // Handle saving the button configuration and add it to the chat
-  const handleSaveButton = () => {
-    if (buttonName && buttonAction) {
-      setShowButtonForm(false); // Hide the form after saving
-      setButtonName(""); // Clear input fields
-      setButtonAction(""); // Clear select box
-    } else {
-      alert("Please enter both a button name and select an action.");
-    }
-  };
-
-  // Handle adding a text component
-  const handleAddText = () => {
-    // Ensure you add a new text component with empty content
-    setComponentOrder((prev) => [...prev, "text"]);
-    setTextComponents((prev) => [...prev, { content: "" }]);
-  };
-
-  // Handle adding an image component
+  // Add a new image component
   const handleAddImage = () => {
-    // Ensure you add a new image component with empty content
-    setComponentOrder((prev) => [...prev, "image"]);
-    setImageComponents((prev) => [...prev, { content: "" }]);
+    setComponents((prev) => [
+      ...prev,
+      { type: "image", content: "" }, // Default content can be empty
+    ]);
   };
-  const deleteComponent = (index, type) => {
-    if (type === "text") {
-      setTextComponents((prev) => prev.filter((_, idx) => idx !== index)); // Remove from textComponents
-    } else if (type === "image") {
-      setImageComponents((prev) => prev.filter((_, idx) => idx !== index)); // Remove from imageComponents
-    } else if (type === "button") {
-      setButtonComponents((prev) => prev.filter((_, idx) => idx !== index));
+
+  // Add a new button component
+  const handleAddButton = () => {
+    setComponents((prev) => [
+      ...prev,
+      { type: "button", label: "", action: "" }, // Default properties
+    ]);
+  };
+
+  // Update a text component
+  const updateText = (index, newContent) => {
+    setComponents((prev) =>
+      prev.map((component, i) =>
+        i === index ? { ...component, content: newContent } : component
+      )
+    );
+  };
+
+  // Update an image component
+  const updateImage = (index, newContent) => {
+    setComponents((prev) =>
+      prev.map((component, i) =>
+        i === index ? { ...component, content: newContent } : component
+      )
+    );
+  };
+
+  // Update a button component
+  const updateButton = (index, newLabel, newAction) => {
+    setComponents((prev) =>
+      prev.map((component, i) =>
+        i === index
+          ? { ...component, label: newLabel, action: newAction }
+          : component
+      )
+    );
+  };
+
+  // Delete a component
+  const deleteComponent = (index) => {
+    setComponents((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Publish components to the server
+  const handlePublish = async () => {
+    if (!campaignData) {
+      console.error("Campaign data is not loaded.");
+      return;
     }
 
-    // Update the component order to remove the component type
-    setComponentOrder((prev) => prev.filter((_, idx) => idx !== index));
+    try {
+      const updatedData = {
+        facebook: JSON.stringify(components), // Update the `facebook` field with components
+      };
+      console.log("Campaign data updated successfully:", updatedData);
+
+      await axios.patch(
+        import.meta.env.VITE_SERVICE_BASE_URL + `/campaigns/${id}/details`,
+        updatedData
+      );
+
+      console.log("Campaign data updated successfully:", updatedData);
+    } catch (error) {
+      const updatedData = {
+        ...campaignData,
+        facebook: JSON.stringify(components), // Update the `facebook` field with components
+      };
+      console.log("Campaign data updated successfully:", updatedData);
+      console.error("Error updating campaign data:", error);
+    }
   };
+
   return (
     <Box
       sx={{
         width: "100%",
-        // height: 10,
         display: "flex",
         flex: 1,
         justifyContent: "flex-end",
       }}
     >
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      {console.log("campaignData", campaignData)}
+      <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
         <Box
-          sx={{
-            width: "100%",
-            // height: "20%",
-            display: "flex",
-            flexDirection: "row",
-            gap: 2,
-          }}
+          sx={{ width: "100%", display: "flex", flexDirection: "row", gap: 2 }}
         >
           <Card
             sx={{
               mb: 2,
               padding: 0,
               width: "100%",
-              // height: "20%",
               minHeight: 50,
               maxHeight: 90,
             }}
@@ -210,11 +161,8 @@ const FacebookMessage = () => {
                 Campaign Name
               </Typography>
               <Typography variant="h5" textAlign="center" color={"primary"}>
-                {`Campaign ${id}`}
+                {`${campaignData?.name}`}
               </Typography>
-
-              {/* Use the AnimatedNumber component to animate the user count */}
-              {/* <AnimatedNumber targetNumber={1000} duration={3} /> */}
             </CardContent>
           </Card>
           <Card
@@ -222,7 +170,6 @@ const FacebookMessage = () => {
               mb: 2,
               padding: 0,
               width: "100%",
-              // height: "20%",
               minHeight: 50,
               maxHeight: 90,
             }}
@@ -231,7 +178,6 @@ const FacebookMessage = () => {
               <Typography variant="h6" textAlign="center">
                 User Count
               </Typography>
-              {/* Use the AnimatedNumber component to animate the user count */}
               <AnimatedNumber targetNumber={1000} duration={3} />
             </CardContent>
           </Card>
@@ -249,9 +195,8 @@ const FacebookMessage = () => {
             borderRadius: 2,
             backgroundColor: "#fff",
             minHeight: "50vh",
-            maxHeight: "50vh", // Limit the height of the whole box
-            overflowY: "auto", // Enable vertical scrolling
-
+            maxHeight: "50vh",
+            overflowY: "auto",
             "&::-webkit-scrollbar": {
               width: "6px", // Set the width of the scrollbar
               height: "8px", // Set the height of the scrollbar (for horizontal scroll)
@@ -270,61 +215,47 @@ const FacebookMessage = () => {
             },
           }}
         >
-          {/* Render components based on the order array */}
-          {componentOrder.map((componentType, idx) => {
-            if (componentType === "text") {
+          {/* Render components */}
+          {console.log("component", components)}
+          {components.map((component, index) => {
+            if (component.type === "text") {
               return (
                 <TextMessage
-                  key={`text-${idx}`}
-                  botmessage={textComponents[idx]?.content} // Render the text for the specific index
-                  setBotMessage={(message) => {
-                    const updatedTextComponents = [...textComponents];
-                    updatedTextComponents[idx] = { content: message };
-                    setTextComponents(updatedTextComponents);
-                  }}
-                  onDelete={() => deleteComponent(idx, "text")}
+                  key={`text-${index}`}
+                  botmessage={component.content}
+                  setBotMessage={(newContent) => updateText(index, newContent)}
+                  onDelete={() => deleteComponent(index)}
                 />
               );
             }
-            if (componentType === "image") {
+            if (component.type === "image") {
               return (
                 <ImageUpload
-                  key={`image-${idx}`}
-                  fileInputRef={fileInputRef}
-                  handleImageChange={(event) => handleImageChange(event, idx)} // Pass index for image components
-                  selectedImage={imageComponents[idx]?.content} // Render the image for the specific index
-                  onDelete={() => deleteComponent(idx, "image")}
+                  key={`image-${index}`}
+                  selectedImage={component.content}
+                  handleImageChange={(event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                      updateImage(index, URL.createObjectURL(file));
+                    }
+                  }}
+                  onDelete={() => deleteComponent(index)}
                 />
               );
             }
-            if (componentType === "button") {
-              {
-                console.log("buttonName", buttonName);
-                console.log("label", buttonComponents);
-              }
+            if (component.type === "button") {
               return (
                 <ButtonComponent
-                  key={`button-${idx}`}
-                  label={buttonComponents[idx]?.label}
-                  onDelete={() => deleteComponent(idx, "button")}
-                  buttonAction={buttonComponents[idx]?.action}
-                  handleSaveButton={handleSaveButton}
-                  setButtonAction={(message) => {
-                    const updatedButtonComponents = [...buttonComponents];
-                    updatedButtonComponents[idx] = {
-                      ...updatedButtonComponents[idx],
-                      action: message,
-                    };
-                    setButtonComponents(updatedButtonComponents);
-                  }}
-                  setButtonName={(message) => {
-                    const updatedButtonComponents = [...buttonComponents];
-                    updatedButtonComponents[idx] = {
-                      ...updatedButtonComponents[idx],
-                      label: message,
-                    };
-                    setButtonComponents(updatedButtonComponents);
-                  }}
+                  key={`button-${index}`}
+                  label={component.label}
+                  buttonAction={component.action}
+                  setButtonName={(newLabel) =>
+                    updateButton(index, newLabel, component.action)
+                  }
+                  setButtonAction={(newAction) =>
+                    updateButton(index, component.label, newAction)
+                  }
+                  onDelete={() => deleteComponent(index)}
                 />
               );
             }
@@ -332,54 +263,25 @@ const FacebookMessage = () => {
           })}
         </Box>
 
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Button
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={handleAddText} // Add text component
-          >
+        <Box sx={{ display: "flex", justifyContent: "space-between", gap: 2 }}>
+          <Button variant="contained" sx={{ mt: 2 }} onClick={handleAddText}>
             Add Text
           </Button>
-          <Button
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={handleAddImage} // Add image component
-          >
+          <Button variant="contained" sx={{ mt: 2 }} onClick={handleAddImage}>
             Add Image
           </Button>
-          <Button
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={handleAddButton} // Add image component
-          >
+          <Button variant="contained" sx={{ mt: 2 }} onClick={handleAddButton}>
             Add Button
           </Button>
-
-          {/* <Button
+          <Button
             variant="contained"
+            color="success"
             sx={{ mt: 2 }}
-            onClick={() =>
-              setMessages([
-                ...messages,
-                { type: "button", content: "Not Click", sender: "bot" },
-              ])
-            }
+            onClick={handlePublish}
           >
-            Add Button
-          </Button> */}
+            Publish
+          </Button>
         </Box>
-        <Button
-          variant="contained"
-          sx={{ mt: 2 }}
-          onClick={() =>
-            setMessages([
-              ...messages,
-              { type: "button", content: "Not Click", sender: "bot" },
-            ])
-          }
-        >
-          Publish
-        </Button>
       </Box>
 
       <Container
@@ -420,82 +322,20 @@ const FacebookMessage = () => {
             }}
           >
             <Stack spacing={2} p={2}>
-              {/* {messages.map((message, idx) => (
+              {components.map((component, index) => (
                 <ChatBubble
-                  key={idx}
-                  message={message}
-                  isUser={message.sender === "user"}
+                  key={index}
+                  message={
+                    component.type === "button"
+                      ? component.label
+                      : component.content
+                  }
+                  type={component.type}
                 />
-              ))} */}
-
-              {componentOrder.map((componentType, idx) => {
-                if (componentType === "text") {
-                  return (
-                    <ChatBubble
-                      key={`text-${idx}`}
-                      message={textComponents[idx]?.content}
-                      isUser={false}
-                      handleInputChange={setBotMessage}
-                      type="text"
-                      // setBotMessage={setBotMessage}
-                      // onDelete={() => deleteComponent(idx, "text")}
-                    />
-                  );
-                }
-                if (componentType === "image") {
-                  return (
-                    <ChatBubble
-                      key={`image-${idx}`}
-                      message={imageComponents[idx]?.content}
-                      handleInputChange={handleImageChange}
-                      type="image"
-                      // selectedImage={selectedImage}
-                      // onDelete={() => deleteComponent(idx, "image")}
-                    />
-                  );
-                }
-                if (componentType === "button") {
-                  return (
-                    <ChatBubble
-                      key={`button-${idx}`}
-                      message={buttonComponents[idx]?.label}
-                      handleInputChange={handleAddButton}
-                      type="button"
-                      action={buttonComponents[idx]?.action}
-                      // selectedImage={selectedImage}
-                      // onDelete={() => deleteComponent(idx, "image")}
-                    />
-                  );
-                }
-                return null;
-              })}
-              {isTyping && (
-                <Typography variant="body1">Chatbot is typing...</Typography>
-              )}
+              ))}
               <div ref={chatEndRef} />
             </Stack>
           </Box>
-
-          {/* <Box mt={2} display="flex" gap={1} sx={{ margin: 2 }}>
-            <TextareaAutosize
-              minRows={5}
-              maxRows={10}
-              placeholder="Type a message"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              style={{
-                width: "90%",
-                maxHeight: 50,
-                border: "1px solid #ccc",
-                borderRadius: 4,
-                fontSize: 14,
-                resize: "none",
-              }}
-            />
-            <Button variant="contained" onClick={handleSendMessage}>
-              Send
-            </Button>
-          </Box> */}
         </DeviceFrameset>
       </Container>
     </Box>

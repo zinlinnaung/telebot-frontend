@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styled from "@emotion/styled";
 import {
   Paper,
@@ -37,14 +38,6 @@ const StyledTableCell = styled(TableCell)(({ theme, width }) => ({
 }));
 
 const Campaign = () => {
-  const userCounts = {
-    messenger: 1200,
-    viber: 800,
-    telegram: 1500,
-    sms: 3500,
-    email: 200,
-  };
-
   const [openDialog, setOpenDialog] = useState(false);
   const [campaigns, setCampaigns] = useState([]); // Store campaigns dynamically
   const [campaign, setCampaign] = useState({
@@ -52,6 +45,22 @@ const Campaign = () => {
     name: "",
     description: "",
   });
+
+  // Fetch campaigns on component mount
+  useEffect(() => {
+    fetchCampaigns();
+  }, []);
+
+  const fetchCampaigns = async () => {
+    try {
+      const response = await axios.get(
+        import.meta.env.VITE_SERVICE_BASE_URL + "/campaigns"
+      );
+      setCampaigns(response.data);
+    } catch (error) {
+      console.error("Error fetching campaigns:", error);
+    }
+  };
 
   const handleSearch = (query) => {
     console.log("Search:", query);
@@ -73,20 +82,36 @@ const Campaign = () => {
     }));
   };
 
-  const handleSaveCampaign = () => {
-    const newCampaign = {
-      id: campaigns.length + 1,
-      name: campaign.name,
-      description: campaign.description,
-    };
+  const handleSaveCampaign = async () => {
+    try {
+      const newCampaign = {
+        name: campaign.name,
+        description: campaign.description,
+      };
 
-    setCampaigns((prevState) => [...prevState, newCampaign]);
-    setCampaign({ id: null, name: "", description: "" }); // Reset form
-    handleDialogClose();
+      // Send POST request to create a new campaign
+      await axios.post(
+        import.meta.env.VITE_SERVICE_BASE_URL + "/campaigns/create",
+        newCampaign
+      );
+      fetchCampaigns(); // Refresh campaign list
+      setCampaign({ id: null, name: "", description: "" }); // Reset form
+      handleDialogClose();
+    } catch (error) {
+      console.error("Error saving campaign:", error);
+    }
   };
 
-  const handleDeleteCampaign = (id) => {
-    setCampaigns((prevState) => prevState.filter((c) => c.id !== id));
+  const handleDeleteCampaign = async (id) => {
+    try {
+      // Send DELETE request to remove the campaign
+      await axios.delete(
+        import.meta.env.VITE_SERVICE_BASE_URL + `/campaigns/${id}`
+      );
+      fetchCampaigns(); // Refresh campaign list
+    } catch (error) {
+      console.error("Error deleting campaign:", error);
+    }
   };
 
   return (
@@ -123,20 +148,10 @@ const Campaign = () => {
           gap: 2,
         }}
       >
-        {Object.keys(userCounts).map((key) => (
-          <Box key={key} sx={{ flex: 1, minWidth: 200 }}>
-            <Card sx={{ height: "100%" }}>
-              <CardContent>
-                <Typography variant="h6" component="div" gutterBottom>
-                  {key.charAt(0).toUpperCase() + key.slice(1)}
-                </Typography>
-                <Typography variant="h5" component="div">
-                  {userCounts[key]}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Box>
-        ))}
+        {/* Add your userCounts component here */}
+      </Box>
+      <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+        <SearchBar onSearch={handleSearch} />
       </Box>
 
       <Box sx={{ width: "100%" }}>
@@ -165,11 +180,6 @@ const Campaign = () => {
             },
           }}
         >
-          <Box
-            sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}
-          >
-            <SearchBar onSearch={handleSearch} />
-          </Box>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -190,20 +200,6 @@ const Campaign = () => {
                   }}
                   handleDeleteCampaign={handleDeleteCampaign}
                 />
-                // <TableRow key={row.id}>
-                //   <StyledTableCell>{row.id}</StyledTableCell>
-                //   <StyledTableCell>{row.name}</StyledTableCell>
-                //   <StyledTableCell>{row.description}</StyledTableCell>
-                //   <StyledTableCell>
-                //     <Button
-                //       variant="outlined"
-                //       color="error"
-                //       onClick={() => handleDeleteCampaign(row.id)}
-                //     >
-                //       Delete
-                //     </Button>
-                //   </StyledTableCell>
-                // </TableRow>
               ))}
             </TableBody>
           </Table>
