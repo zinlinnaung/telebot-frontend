@@ -326,6 +326,7 @@ const RevoteList = () => {
                       : component.content
                   }
                   type={component.type}
+                  action={component.type === "button" && component.action}
                 />
               ))}
               <div ref={chatEndRef} />

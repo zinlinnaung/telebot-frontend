@@ -18,6 +18,7 @@ const EmailList = () => {
   const { id } = useParams();
   const [emailContent, setEmailContent] = useState("");
   const [subject, setSubject] = useState("");
+  const [campaignData, setCampaignData] = useState(null);
   const handleContentChange = (content) => {
     setEmailContent(content);
     console.log(emailContent);
@@ -29,6 +30,7 @@ const EmailList = () => {
           import.meta.env.VITE_SERVICE_BASE_URL + `/campaigns/${id}`
         );
         const email = await JSON.parse(response.data.CampainDetail.email);
+        setCampaignData(response.data);
         setEmailContent(email?.emailContent);
         setSubject(email?.subject);
         // setCampaignData(response.data);
@@ -96,7 +98,7 @@ const EmailList = () => {
                 Campaign Name
               </Typography>
               <Typography variant="h5" textAlign="center" color={"primary"}>
-                {`Campaign ${id}`}
+                {`${campaignData?.name}`}
               </Typography>
             </CardContent>
           </Card>
@@ -179,6 +181,7 @@ const EmailList = () => {
                 isUser={false}
                 type={"email"}
                 subject={subject}
+                // action={component.type === "button" && component.action}
               />
             </Stack>
           </Box>

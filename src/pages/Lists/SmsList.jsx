@@ -277,12 +277,12 @@ const SmsList = () => {
           <Button variant="contained" sx={{ mt: 2 }} onClick={handleAddText}>
             Add Text
           </Button>
-          <Button variant="contained" sx={{ mt: 2 }} onClick={handleAddImage}>
+          {/* <Button variant="contained" sx={{ mt: 2 }} onClick={handleAddImage}>
             Add Image
           </Button>
           <Button variant="contained" sx={{ mt: 2 }} onClick={handleAddButton}>
             Add Button
-          </Button>
+          </Button> */}
           <Button
             variant="contained"
             color="success"
@@ -341,6 +341,7 @@ const SmsList = () => {
                       : component.content
                   }
                   type={component.type}
+                  action={component.type === "button" && component.action}
                 />
               ))}
               <div ref={chatEndRef} />

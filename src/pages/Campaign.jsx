@@ -4,9 +4,6 @@ import styled from "@emotion/styled";
 import {
   Paper,
   Box,
-  Card,
-  CardContent,
-  Typography,
   Button,
   Dialog,
   DialogActions,
@@ -19,8 +16,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  tableCellClasses,
+  TablePagination,
 } from "@mui/material";
+import { tableCellClasses } from "@mui/material";
 import ItemCard from "../components/winningRatio/ItemCard";
 import SearchBar from "../components/common/SearchBar";
 
@@ -45,6 +43,10 @@ const Campaign = () => {
     name: "",
     description: "",
   });
+
+  // Pagination state
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   // Fetch campaigns on component mount
   useEffect(() => {
@@ -89,13 +91,12 @@ const Campaign = () => {
         description: campaign.description,
       };
 
-      // Send POST request to create a new campaign
       await axios.post(
         import.meta.env.VITE_SERVICE_BASE_URL + "/campaigns/create",
         newCampaign
       );
-      fetchCampaigns(); // Refresh campaign list
-      setCampaign({ id: null, name: "", description: "" }); // Reset form
+      fetchCampaigns();
+      setCampaign({ id: null, name: "", description: "" });
       handleDialogClose();
     } catch (error) {
       console.error("Error saving campaign:", error);
@@ -104,14 +105,22 @@ const Campaign = () => {
 
   const handleDeleteCampaign = async (id) => {
     try {
-      // Send DELETE request to remove the campaign
       await axios.delete(
         import.meta.env.VITE_SERVICE_BASE_URL + `/campaigns/${id}`
       );
-      fetchCampaigns(); // Refresh campaign list
+      fetchCampaigns();
     } catch (error) {
       console.error("Error deleting campaign:", error);
     }
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   return (
@@ -121,6 +130,7 @@ const Campaign = () => {
         overflow: "auto",
         p: "2rem",
         display: "flex",
+
         flexDirection: "column",
         alignItems: "center",
       }}
@@ -138,73 +148,77 @@ const Campaign = () => {
         </Button>
       </Box>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          width: "100%",
-          mb: 4,
-          flexWrap: "wrap",
-          gap: 2,
-        }}
-      >
-        {/* Add your userCounts component here */}
-      </Box>
       <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
         <SearchBar onSearch={handleSearch} />
       </Box>
-
-      <Box sx={{ width: "100%" }}>
-        <TableContainer
-          component={Paper}
-          sx={{
-            maxHeight: "60vh", // Scrollable container for body
-            overflowY: "auto",
-            display: "flex",
-            flexDirection: "column",
-            "&::-webkit-scrollbar": {
-              width: "6px", // Set the width of the scrollbar
-              height: "8px", // Set the height of the scrollbar (for horizontal scroll)
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#007bff", // Change the thumb color (the draggable part)
-              borderRadius: "4px", // Rounded corners
-              border: "2px solid #fff", // Optional: add a border around the thumb
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "#f1f1f1", // Set the track color (the background of the scrollbar)
-              borderRadius: "4px", // Rounded corners for the track
-            },
-            "&::-webkit-scrollbar-corner": {
-              backgroundColor: "#f1f1f1", // If there's a scrollbar in both directions, the corner is customizable
-            },
-          }}
-        >
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <StyledTableCell width={"10%"}>ID</StyledTableCell>
-                <StyledTableCell width={"25%"}>Name</StyledTableCell>
-                <StyledTableCell width={"25%"}>Description</StyledTableCell>
-                <StyledTableCell>Action</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {campaigns.map((row) => (
-                <ItemCard
-                  key={row.id}
-                  data={{
-                    id: row.id,
-                    name: row.name,
-                    description: row.description,
-                  }}
-                  handleDeleteCampaign={handleDeleteCampaign}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          height: "60vh",
+          flexDirection: "column",
+        }}
+      >
+        <Box sx={{ width: "100%" }}>
+          <TableContainer
+            component={Paper}
+            sx={{
+              maxHeight: "60vh",
+              overflowY: "auto",
+              "&::-webkit-scrollbar": {
+                width: "6px", // Set the width of the scrollbar
+                height: "8px", // Set the height of the scrollbar (for horizontal scroll)
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#007bff", // Change the thumb color (the draggable part)
+                borderRadius: "4px", // Rounded corners
+                border: "2px solid #fff", // Optional: add a border around the thumb
+              },
+              "&::-webkit-scrollbar-track": {
+                backgroundColor: "#f1f1f1", // Set the track color (the background of the scrollbar)
+                borderRadius: "4px", // Rounded corners for the track
+              },
+              "&::-webkit-scrollbar-corner": {
+                backgroundColor: "#f1f1f1", // If there's a scrollbar in both directions, the corner is customizable
+              },
+            }}
+          >
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell width={"10%"}>ID</StyledTableCell>
+                  <StyledTableCell width={"25%"}>Name</StyledTableCell>
+                  <StyledTableCell width={"25%"}>Description</StyledTableCell>
+                  <StyledTableCell>Action</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {campaigns
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => (
+                    <ItemCard
+                      key={row.id}
+                      data={{
+                        id: row.id,
+                        name: row.name,
+                        description: row.description,
+                      }}
+                      handleDeleteCampaign={handleDeleteCampaign}
+                    />
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
       </Box>
+      <TablePagination
+        component="div"
+        count={campaigns.length}
+        page={page}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
 
       <Dialog open={openDialog} onClose={handleDialogClose}>
         <DialogTitle>Add Campaign</DialogTitle>
