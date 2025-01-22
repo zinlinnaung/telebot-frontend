@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.15.0",
     "@mui/lab": "^5.0.0-alpha.127",
-    "@mui/material": "^5.15.0",
+    "@mui/material": "^5.16.14",
     "@mui/x-data-grid": "^6.5.0",
     "@mui/x-date-pickers": "^5.0.20",
     "@react-spring/web": "^9.7.5",

@@ -17,12 +17,12 @@ const TextMessage = ({ setBotMessage, botmessage, onDelete }) => {
             // position: "absolute",
             // top: 0,
             // right: -400,
-            color: "#fff",
+            color: "red",
             display: "flex",
             alignSelf: "flex-end",
-            backgroundColor: "rgba(0, 0, 0, 0.3)",
+            // backgroundColor: "rgba(0, 0, 0, 0.3)",
             "&:hover": {
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              // backgroundColor: "rgba(0, 0, 0, 0.5)",
             },
           }}
         >

@@ -7,7 +7,8 @@ const ChatBubble = ({
   isUser,
   handleInputChange,
   type,
-  action,
+  action, // action should be the URL or the redirect link
+  url, // Assuming url is passed as a prop
   subject,
 }) => {
   const renderMessage = () => {
@@ -53,13 +54,17 @@ const ChatBubble = ({
         );
 
       case "button":
-        {
-          console.log(message);
-        }
+        // If there's a URL or action, handle the redirect
         return (
           <Button
             variant="contained"
-            onClick={() => alert(`Button Action: ${action && action}`)}
+            onClick={() => {
+              if (url) {
+                window.location.href = url; // Redirect to the URL when button is clicked
+              } else if (action) {
+                alert(`Button Action: ${action}`); // Fallback alert if no URL is provided
+              }
+            }}
           >
             {message}
           </Button>
@@ -79,17 +84,15 @@ const ChatBubble = ({
         margin: "5px 0",
       }}
     >
-      {!isUser && type != "email" && (
+      {!isUser && type !== "email" && (
         <Box
           sx={{
-            // marginTop: 2,
             width: 30,
             height: 30,
             borderRadius: "50%",
             backgroundColor: "#bbb", // Placeholder for bot's avatar
             marginRight: 1, // Space between avatar and message bubble
             display: "flex",
-            // justifyContent: "end",
             alignSelf: "flex-end",
           }}
         />
@@ -110,14 +113,12 @@ const ChatBubble = ({
       {isUser && (
         <Box
           sx={{
-            // marginTop: 2,
             width: 30,
             height: 30,
             borderRadius: "50%",
             backgroundColor: "#000000", // Placeholder for user's avatar
             marginLeft: 1, // Space between message and avatar for user
             display: "flex",
-            // justifyContent: "end",
             alignSelf: "flex-end",
           }}
         />

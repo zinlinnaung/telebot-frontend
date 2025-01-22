@@ -11,6 +11,8 @@ import WinningRatioModal from "./WinningRatioModal";
 import { QueryClient, useMutation } from "react-query";
 import useAxios from "../../hooks/useAxios";
 import { useNavigate } from "react-router-dom";
+import BorderColorRoundedIcon from "@mui/icons-material/BorderColorRounded";
+import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 
 const StyledTableCell = styled(TableCell)(({ theme, width }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -69,20 +71,21 @@ const ItemCard = ({ data, handleDeleteCampaign }) => {
         </StyledTableCell> */}
         <StyledTableCell>
           <Button
-            variant="outlined"
+            variant="contained"
             size="small"
+            sx={{ color: "white" }}
             onClick={() => navigate(`/campaign/${data.id}`)}
           >
-            Edit
+            <BorderColorRoundedIcon sx={{ fontSize: "1.3rem" }} />
           </Button>
           <Button
-            variant="outlined"
+            variant="contained"
             size="small"
             color="error"
-            sx={{ marginLeft: 2 }}
+            sx={{ marginLeft: 2, color: "white" }}
             onClick={() => handleDeleteCampaign(data.id)}
           >
-            Delete
+            <DeleteForeverRoundedIcon sx={{ fontSize: "1.3rem" }} />
           </Button>
         </StyledTableCell>
       </StyledTableRow>

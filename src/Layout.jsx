@@ -39,20 +39,6 @@ const Layout = () => {
   const navs =
     role === "Admin"
       ? [
-          // {
-          //   name: "Dashboard",
-          //   route: "/message",
-          //   icon: (
-          //     <DashboardIcon
-          //       sx={{
-          //         color: pathname.includes("/message")
-          //           ? "white"
-          //           : "primary.main",
-          //       }}
-          //     />
-          //   ),
-          // },
-
           {
             name: "Campaigns",
             route: "/campaign",
@@ -80,20 +66,6 @@ const Layout = () => {
               />
             ),
           },
-
-          // {
-          //   name: "Change Password",
-          //   route: "/change-password",
-          //   icon: (
-          //     <KeyIcon
-          //       sx={{
-          //         color: pathname.includes("/change-password")
-          //           ? "white"
-          //           : "primary.main",
-          //       }}
-          //     />
-          //   ),
-          // },
         ]
       : [
           {

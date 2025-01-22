@@ -35,7 +35,7 @@ const AnimatedNumber = ({ targetNumber }) => {
       key={count} // Ensure re-rendering on count change
       exit={{ opacity: 0 }}
       animate={{ y: 0 }} // Set the rotation to normal after flip
-      initial={{ y: 10 }} // Start the element flipped downwards
+      initial={{ y: 0 }} // Start the element flipped downwards
       transition={{
         type: "spring", // Use spring for smooth rotation
         stiffness: 300,

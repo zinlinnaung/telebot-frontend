@@ -238,6 +238,8 @@ const Campaign = () => {
             onChange={handleInputChange}
             fullWidth
             margin="normal"
+            multiline // This makes it a multi-line text box
+            rows={4} // Sets the height of the text box, adjust as needed
           />
         </DialogContent>
         <DialogActions>

@@ -13,6 +13,8 @@ import axios from "axios";
 import EmailEditor from "../../components/message/EmailEditor";
 import { DeviceFrameset } from "react-device-frameset";
 import ChatBubble from "../../components/chat/ChatBubble";
+import SaveOutlinedIcon from "@mui/icons-material/SaveOutlined";
+import SendRoundedIcon from "@mui/icons-material/SendRounded";
 
 const EmailList = () => {
   const { id } = useParams();
@@ -134,8 +136,8 @@ const EmailList = () => {
             boxShadow: 3,
             borderRadius: 2,
             backgroundColor: "#fff",
-            minHeight: "55vh",
-            maxHeight: "80vh",
+            minHeight: "50vh",
+            maxHeight: "50vh",
             overflowY: "auto",
           }}
         >
@@ -147,11 +149,24 @@ const EmailList = () => {
           />
         </Box>
 
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Button variant="contained" sx={{ mt: 2 }} onClick={handlePublish}>
-            Publish
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            variant="contained"
+            // color="success"
+            sx={{ mt: 2 }}
+            onClick={handlePublish}
+          >
+            <SaveOutlinedIcon /> Save
           </Button>
         </Box>
+        <Button
+          variant="contained"
+          // color="success"
+          sx={{ mt: 2 }}
+          onClick={handlePublish}
+        >
+          <SendRoundedIcon /> Sent Now
+        </Button>
       </Box>
 
       <Container

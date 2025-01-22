@@ -10,16 +10,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 const ButtonComponent = ({
   label,
-
   setButtonName,
-
   onDelete,
   buttonAction,
   setButtonAction,
+  url,
+  setUrl,
 }) => {
   return (
     <>
@@ -28,6 +28,7 @@ const ButtonComponent = ({
           display: "flex",
           justifyContent: "space-between",
           width: "100%",
+
           buttonAction,
         }}
       >
@@ -35,15 +36,12 @@ const ButtonComponent = ({
         <IconButton
           onClick={onDelete}
           sx={{
-            // position: "absolute",
-            // top: 0,
-            // right: -400,
-            color: "#fff",
+            color: "red",
             display: "flex",
             alignSelf: "flex-end",
-            backgroundColor: "rgba(0, 0, 0, 0.3)",
+            // backgroundColor: "rgba(0, 0, 0, 0.3)",
             "&:hover": {
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              // backgroundColor: "rgba(0, 0, 0, 0.5)",
             },
           }}
         >
@@ -51,7 +49,7 @@ const ButtonComponent = ({
         </IconButton>
       </Box>
 
-      <Box sx={{ marginTop: 2 }}>
+      <Box sx={{ marginTop: 2, width: "100%" }}>
         <TextField
           label="Button Name"
           value={label}
@@ -71,20 +69,19 @@ const ButtonComponent = ({
             {/* Add more button actions as needed */}
           </Select>
         </FormControl>
-        {/* <Button variant="contained" onClick={handleSaveButton}>
-          Save Button
-        </Button> */}
+
+        {/* Conditionally render URL text box based on selected action */}
+        {(buttonAction === "openLink" || buttonAction === "submitForm") && (
+          <TextField
+            label="URL"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            fullWidth
+            sx={{ marginBottom: 2 }}
+            placeholder="Enter URL"
+          />
+        )}
       </Box>
-      {/* <Button
-        sx={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-        }}
-        onClick={onDelete}
-      >
-        Delete
-      </Button> */}
     </>
   );
 };
